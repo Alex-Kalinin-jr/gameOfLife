@@ -34,12 +34,7 @@ int main(void) {
         output(matr);
         drawing(&matr, &cloneMatr);
         system("sleep 0.1");
-        while ((kb = getchar()) != '\n' && kb != EOF && kb != 'q') {};//!!!!!!!!!!this place
-            if (kb == 'q')
-                return 0;
         system("clear");
-
-
     }
 
     // system("stty icanon");
