@@ -1,3 +1,4 @@
 game
 lib.c
 lib.h
+*.o
