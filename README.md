@@ -1,6 +1,6 @@
 # DESCRIPTION
 
-![onetwo](img/unnamed.png){ style="display: block; margin: 0 auto" }
+![onetwo](img/unnamed.png)
 
 This is an implementation of the game being very popular in the past (who knows - knows).
 - The field is defined in header file (WIDTH HEIGHT), you can change it if want.
