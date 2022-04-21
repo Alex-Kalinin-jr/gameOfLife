@@ -19,6 +19,7 @@ int main(void) {
         exit(1);
     }
 
+    char kb;
     char **matr = (char **)malloc(HEIGHT * sizeof(char **));
     char *arr = (char *)malloc(HEIGHT * WIDTH * sizeof(char));
     char **cloneMatr = (char **)malloc(HEIGHT * sizeof(char **));
@@ -26,15 +27,22 @@ int main(void) {
     initMatr(matr, arr);
     initMatr(cloneMatr, cloneArr);
     input(matr, img);
+    fclose(img);
 
     for (int i = 0; i < 100; i++) {
+        // system("stty -icanon");
         output(matr);
         drawing(&matr, &cloneMatr);
         system("sleep 0.1");
+        while ((kb = getchar()) != '\n' && kb != EOF && kb != 'q') {};
+            if (kb == 'q')
+                return 0;
         system("clear");
+
+
     }
 
-    fclose(img);
+    // system("stty icanon");
     free(matr);
     free(arr);
     return 0;
