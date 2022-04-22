@@ -3,6 +3,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include "matr.h"
+#include "inp_settings.h"
 
 
 int input(char **matr, FILE *img);
@@ -34,13 +35,7 @@ int main(void) {
 
     char buff;
     struct termios init, new;
-    tcgetattr(fileno(stdin), &init);
-    new = init;
-    new.c_lflag &= ~ECHO;
-    new.c_lflag &= ~ICANON;
-    new.c_cc[VMIN] = 1;
-    new.c_cc[VTIME] = 0;
-    tcsetattr(fileno(stdin), TCSANOW, &new);
+    set_noncanonical(&init, &new);
 
     int val;
     struct timeval tv;
@@ -61,7 +56,7 @@ int main(void) {
         system("clear");
     } while (buff != 'q');
 
-    tcsetattr(fileno(stdin), TCSANOW, &init);
+    set_canon(&init);
 
     free(matr);
     free(arr);
