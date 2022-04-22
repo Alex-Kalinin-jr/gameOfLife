@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <termios.h>
+#include <unistd.h>
 #include "matr.h"
 
 
@@ -13,13 +15,13 @@ int main(void) {
     printf("write path to file:\n");
     char path[50];
     scanf("%s", path);
+
     FILE *img;
     if ((img = fopen(path, "r")) == NULL) {
         printf("cannot open the file\n");
         exit(1);
     }
 
-    char kb;
     char **matr = (char **)malloc(HEIGHT * sizeof(char **));
     char *arr = (char *)malloc(HEIGHT * WIDTH * sizeof(char));
     char **cloneMatr = (char **)malloc(HEIGHT * sizeof(char **));
@@ -29,15 +31,38 @@ int main(void) {
     input(matr, img);
     fclose(img);
 
-    for (int i = 0; i < 100; i++) {
-        // system("stty -icanon");
+
+    char buff;
+    struct termios init, new;
+    tcgetattr(fileno(stdin), &init);
+    new = init;
+    new.c_lflag &= ~ECHO;
+    new.c_lflag &= ~ICANON;
+    new.c_cc[VMIN] = 1;
+    new.c_cc[VTIME] = 0;
+    tcsetattr(fileno(stdin), TCSANOW, &new);
+
+    int val;
+    struct timeval tv;
+    do {
+        fd_set rdfs;
+        FD_ZERO(&rdfs);
+        FD_SET(0, &rdfs);
+        tv.tv_sec = 0;
+        tv.tv_usec = 0;
+        val = select(1, &rdfs, NULL, NULL, &tv);
+        if (val) {
+            buff = getc(stdin);
+        }
+
         output(matr);
         drawing(&matr, &cloneMatr);
         system("sleep 0.1");
         system("clear");
-    }
+    } while (buff != 'q');
 
-    // system("stty icanon");
+    tcsetattr(fileno(stdin), TCSANOW, &init);
+
     free(matr);
     free(arr);
     return 0;
