@@ -15,6 +15,7 @@ This is an implementation of the game being very popular in the past (who knows 
 
 - MASTER BRANCH: There are 100 iterations in the loop. To increase/decrease num of iterations just rewrite loop condition.
 - DEVELOP_TERMIOS BRANCH: There is an infinite loop. To exit program press 'q' button.
+- DEVELOP_NCURSES BRANCH: easiest and the most elegant way for parallel input on this stage of knowlege.
 
 # ATTENTION
 This project is not intended for any purposes other than showing of my style code and undestarding standard algorithms. Just for fun xD.
