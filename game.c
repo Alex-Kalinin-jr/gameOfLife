@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
+#include <ncurses.h>
+#include <string.h>
 #include "matr.h"
-#include "inp_settings.h"
 
 
 int input(char **matr, FILE *img);
@@ -13,9 +12,18 @@ int rules(char ***matr, int i, int j);
 
 int main(void) {
     system("clear");
-    printf("write path to file:\n");
+    initscr();
+
+    char string[] = "write path to file:";
     char path[50];
-    scanf("%s", path);
+    int row, col;
+    getmaxyx(stdscr, row, col);
+    mvprintw(row/2, col/2 - strlen(string)/2, "%s", string);
+    move(row/2 + 1, 0);
+    getstr(path);
+
+    raw();
+    noecho();
 
     FILE *img;
     if ((img = fopen(path, "r")) == NULL) {
@@ -32,31 +40,16 @@ int main(void) {
     input(matr, img);
     fclose(img);
 
-
-    char buff;
-    struct termios init, new;
-    set_noncanonical(&init, &new);
-
-    int val;
-    struct timeval tv;
+    int ch;
     do {
-        fd_set rdfs;
-        FD_ZERO(&rdfs);
-        FD_SET(0, &rdfs);
-        tv.tv_sec = 0;
-        tv.tv_usec = 0;
-        val = select(1, &rdfs, NULL, NULL, &tv);
-        if (val) {
-            buff = getc(stdin);
-        }
-
-        output(matr);
+        output_curses(matr);
         drawing(&matr, &cloneMatr);
-        system("sleep 0.1");
-        system("clear");
-    } while (buff != 'q');
-
-    set_canon(&init);
+        timeout(100);
+        ch = getch();
+        clear();
+        move(0,0);
+    } while (ch != 'q');
+    endwin();
 
     free(matr);
     free(arr);

@@ -6,5 +6,6 @@
 
 void initMatr(char **matr, char *arr);
 void output(char **matr);
+void output_curses(char **matr);
 
 #endif //_GAMEOFLIFE_MATR_H_

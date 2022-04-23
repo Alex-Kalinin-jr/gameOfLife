@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ncurses.h>
+
 #include "matr.h"
 
 void initMatr(char **matr, char *arr) {
@@ -17,4 +19,15 @@ void output(char **matr) {
         }
         fprintf(stdout, "\n");
     }
+}
+
+void output_curses(char **matr) {
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            printw("%c ", matr[i][j]);
+        }
+        printw("\n");
+
+    }
+    refresh();
 }
